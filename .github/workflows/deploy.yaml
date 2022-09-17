@@ -1,0 +1,24 @@
+name: deploy-sam-application
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+      - name: Setup Sam CLI
+        uses: aws-actions/setup-sam@v1
+      - name: Configure AWS credentials from Test account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          aws-region: us-east-1
+      # sam build
+      - run: sam build --use-container
+      # sam deploy
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name ${{ secrets.STACK_NAME }} --s3-bucket ${{ secrets.SAM_BUCKET }} --capabilities CAPABILITY_IAM --region us-east-1
