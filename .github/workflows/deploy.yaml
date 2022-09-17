@@ -4,16 +4,27 @@ on:
   push:
     branches:
       - main
+
+# Required to get the ID Token that will be used for OIDC
+permissions:
+  id-token: write
+
+
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Setup Python
         uses: actions/setup-python@v2
       - name: Setup Sam CLI
         uses: aws-actions/setup-sam@v1
-      - name: Configure AWS credentials from Test account
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.AWS_ROLE }}
