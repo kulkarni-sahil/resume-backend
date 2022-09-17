@@ -15,6 +15,7 @@ visitor_count_table = dynamodb.Table(VISITOR_COUNT_TABLE_NAME)
 
 def lambda_handler(event=None, context=None):
     logger.debug("Execution Start")
+
     logger.info("Querying DynamoDB Table")
     response = visitor_count_table.get_item(
         Key={
