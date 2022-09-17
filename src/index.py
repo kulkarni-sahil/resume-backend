@@ -36,8 +36,13 @@ def lambda_handler(event=None, context=None):
     )
     logger.debug("Execution complete")
     return {
-      'statusCode': 200,
-      'body': f'{visitor_count}'
+        'statusCode': 200,
+        'headers': {
+            "Access-Control-Allow-Headers": "*",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*"
+        },
+        'body': f'{visitor_count}'
     }
 
 
