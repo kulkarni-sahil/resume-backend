@@ -3,12 +3,9 @@ import boto3
 import logging
 
 # https://realpython.com/python-logging/#classes-and-functions
+# https://docs.aws.amazon.com/lambda/latest/dg/python-logging.html
 logger = logging.getLogger(__name__)
-handler = logging.StreamHandler()
-handler.setLevel(logging.INFO)
-log_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
-handler.setFormatter(log_format)
-logger.addHandler(handler)
+logger.setLevel(logging.INFO)
 
 VISITOR_COUNT_TABLE_NAME = os.environ.get('VISITOR_COUNT_TABLE_NAME', 'visitor-count-resume-backend')
 

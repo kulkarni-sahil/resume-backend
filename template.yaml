@@ -6,10 +6,15 @@ Resources:
     Type: AWS::Serverless::Function
     Description: 'Lambda function retrieves and updates visitor count into DynamoDB table'
     Properties:
+      Architectures:
+        - arm64
       FunctionName: visitor-updator-resume-backend
       Handler: index.lambda_handler
       Runtime: python3.9
       CodeUri: src/
+      Environment:
+        Variables:
+          VISITOR_COUNT_TABLE_NAME: !Ref DynamoDBTable
       Policies:
         DynamoDBCrudPolicy:
           TableName: !Ref DynamoDBTable
