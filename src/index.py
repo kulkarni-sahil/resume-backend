@@ -1,5 +1,14 @@
 import os
 import boto3
+import logging
+
+# https://realpython.com/python-logging/#classes-and-functions
+logger = logging.getLogger(__name__)
+handler = logging.StreamHandler()
+handler.setLevel(logging.INFO)
+log_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(log_format)
+logger.addHandler(handler)
 
 VISITOR_COUNT_TABLE_NAME = os.environ.get('VISITOR_COUNT_TABLE_NAME', 'visitor-count-resume-backend')
 
@@ -8,6 +17,8 @@ visitor_count_table = dynamodb.Table(VISITOR_COUNT_TABLE_NAME)
 
 
 def lambda_handler(event=None, context=None):
+    logger.debug("Execution Start")
+    logger.info("Querying DynamoDB Table")
     response = visitor_count_table.get_item(
         Key={
             'pk': 'visitor_count'
@@ -16,14 +27,16 @@ def lambda_handler(event=None, context=None):
     )
     item = response['Item']
     visitor_count = item['count']
-    print(f"{visitor_count=}")
+    logger.debug(f"Got {visitor_count=} from table")
+
+    logger.info("Updating table with visitor count")
     visitor_count_table.put_item(
         Item={
             'pk': 'visitor_count',
             'count': visitor_count + 1
         }
     )
-
+    logger.debug("Execution complete")
     return {
       'statusCode': 200,
       'body': f'{visitor_count}'
