@@ -9,12 +9,12 @@ logger.setLevel(logging.INFO)
 
 VISITOR_COUNT_TABLE_NAME = os.environ.get('VISITOR_COUNT_TABLE_NAME', 'visitor-count-resume-backend')
 
-dynamodb = boto3.resource('dynamodb')
-visitor_count_table = dynamodb.Table(VISITOR_COUNT_TABLE_NAME)
-
 
 def lambda_handler(event=None, context=None):
     logger.debug("Execution Start")
+
+    dynamodb = boto3.resource('dynamodb')
+    visitor_count_table = dynamodb.Table(VISITOR_COUNT_TABLE_NAME)
 
     logger.info("Querying DynamoDB Table")
     response = visitor_count_table.get_item(

@@ -10,6 +10,7 @@ python = "^3.9"
 
 [tool.poetry.group.dev.dependencies]
 boto3 = "^1.24.75"
+moto = "^4.0.5"
 
 [build-system]
 requires = ["poetry-core"]
